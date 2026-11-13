@@ -7,3 +7,5 @@ Le contenu est dans le dépôt de l'application `tikuna-qhispiyupanki/work-app` 
 - `scripts/build-site.mjs` : fabrique le site (présentation à la racine, démonstration dans `/demo/`).
 
 Le site se met à jour tout seul chaque nuit, ou tout de suite avec « Actions → Mise en ligne du site arbos.fr → Run workflow ».
+
+Mettre en ligne tout de suite depuis l'environnement de travail : un envoi (commit) sur ce dépôt relance aussi la mise en ligne.
