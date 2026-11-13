@@ -1,0 +1,51 @@
+# Met en ligne le site public d'ARBOS (https://arbos.fr) sur GitHub Pages.
+# Le contenu vient du dépôt de l'application (tikuna-qhispiyupanki/work-app) :
+# présentation (dossier site/) à la racine, démonstration dans /demo/ (scripts/build-site.mjs).
+# Se relance chaque nuit pour reprendre les changements du site et de la démo, ou à la main (« Run workflow »).
+name: Mise en ligne du site arbos.fr
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: '17 23 * * *' # vers 3 h du matin à La Réunion
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: tikuna-qhispiyupanki/work-app
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: node scripts/build-site.mjs
+        env:
+          SITE_DOMAIN: arbos.fr
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist-site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
