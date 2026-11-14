@@ -28,6 +28,8 @@ jobs:
         with:
           repository: tikuna-qhispiyupanki/work-app
           ref: main
+          # Dépôt de l'application privé : jeton en lecture seule (secret WORK_APP_TOKEN de ce dépôt).
+          token: ${{ secrets.WORK_APP_TOKEN || github.token }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
